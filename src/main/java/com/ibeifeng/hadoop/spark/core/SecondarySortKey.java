@@ -17,7 +17,7 @@ import scala.math.Ordered;
 /**
  * SecondarySortKey
  *	
- * @Description 自定义二次配置的key
+ * @Description 自定义二次排序的key
  * @author yanglin
  * @version 1.0,2016年11月7日
  * @see
