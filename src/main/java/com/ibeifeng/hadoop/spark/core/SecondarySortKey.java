@@ -2,7 +2,7 @@
  * 项目名：beifeng-spark
  * 文件名：SecondarySortKey.java
  * 版权：Copyright (c) 2014-2015 Beijing BiYouWoShi Tech. Co. Ltd. All Rights Reserved.
- * 描述：自定义二次配置的key
+ * 描述：自定义二次排序的key
  * 修改人：yanglin
  * 修改时间：2016年11月7日 下午6:25:31
  * 修改内容：
