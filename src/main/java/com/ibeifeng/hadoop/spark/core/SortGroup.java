@@ -11,23 +11,21 @@
 package com.ibeifeng.hadoop.spark.core;
 
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
-import org.apache.commons.collections.IteratorUtils;
 import org.apache.spark.SparkConf;
 import org.apache.spark.api.java.JavaSparkContext;
-import org.apache.spark.api.java.function.Function;
 import org.apache.spark.api.java.function.PairFunction;
-import org.apache.spark.api.java.function.VoidFunction;
 
+import jodd.util.collection.SortedArrayList;
 import scala.Tuple2;
 
 /**
  * SortGroup
  *	
- * @Description 分组后排序
+ * @Description 分组后排序取topN
+ *      [(class1,[98, 87, 78]), (class2,[94, 85, 79])]
  * @author yanglin
  * @version 1.0,2016年11月8日
  * @see
@@ -39,7 +37,7 @@ public class SortGroup {
         SparkConf conf=new SparkConf()
                 .setAppName("SortGroup").setMaster("local");
         final JavaSparkContext context=new JavaSparkContext(conf);
-        List<Tuple2<String, List<Integer>>> result=context.textFile("C://Users//yanglin//Desktop//group.txt")
+        List<Tuple2<String, List<Integer>>> result=context.textFile("src/main/resources/group.txt")
             .mapToPair(new PairFunction<String, String, Integer>() {
 
                 private static final long serialVersionUID = 1L;
@@ -48,6 +46,7 @@ public class SortGroup {
                     return new Tuple2<String, Integer>(v.split(" ")[0], Integer.parseInt(v.split(" ")[1]));
                 }
             })
+            //按key进行分组
             .groupByKey()
             .mapToPair(new PairFunction<Tuple2<String,Iterable<Integer>>, String, List<Integer>>() {
 
@@ -58,35 +57,21 @@ public class SortGroup {
                     String className=s._1;
                     Integer[] topScores=new Integer[3];
                     Iterator<Integer> iterator=s._2.iterator();
-                    if (iterator.hasNext()) {
-                        for(int i=0;i<topScores.length;i++){
-                            if (topScores[i]==null) {
-                                topScores[i]=iterator.next();
-                            }
-                            
-                            if (i<topScores.length-1&&topScores[i+1]!=null&&topScores[i+1]>topScores[i]) {
-                                Integer temp=topScores[i];
-                                topScores[i]=topScores[i+1];
-                                topScores[i+1]=temp;
-                            }
-                        }
+                    //使用SortedArrayList对集合中的数据进行自动排序（升序）
+                    List<Integer> list=new SortedArrayList<>();
+                    while (iterator.hasNext()) {
+                        list.add(iterator.next());
                     }
                     
+                    //取集合中升序排序后的最后N个作为topN的值
+                    for(int i=0;i<topScores.length;i++){
+                        topScores[i]=list.get(list.size()-1-i);
+                    }
                     return new Tuple2<String, List<Integer>>(className, Arrays.asList(topScores));
                 }
-            }).collect()
-            /*.foreach(new VoidFunction<Tuple2<String,List<Integer>>>() {
-                
-                private static final long serialVersionUID = 1L;
-
-                public void call(Tuple2<String, List<Integer>> scores) throws Exception {
-                    System.out.println(scores._1);
-                    for(Integer i:scores._2){
-                        System.out.println(i);
-                    }
-                    System.out.println("================");
-                }
-            })*/;
+            }).collect();
+        
+        //[(class1,[98, 87, 78]), (class2,[94, 85, 79])]
         System.out.println(result);
         context.close();
     }
