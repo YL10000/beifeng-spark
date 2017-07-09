@@ -1,0 +1,6 @@
+{"name":"zhangsan","score":78}
+{"name":"lisi","score":93}
+{"name":"wangwu","score":86}
+{"name":"zhaoliu","score":86}
+{"name":"zhouqi","score":86}
+{"name":"lingda","score":93}
