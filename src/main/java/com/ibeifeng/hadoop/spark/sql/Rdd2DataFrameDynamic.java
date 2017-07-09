@@ -40,6 +40,7 @@ public class Rdd2DataFrameDynamic {
                 .setMaster("local");
         JavaSparkContext context=new JavaSparkContext(conf);
         
+        //使用程序构建DataFrame的元数据
         StructType structType=new StructType(new StructField[]{
                 DataTypes.createStructField("id", DataTypes.IntegerType, false),
                 DataTypes.createStructField("name", DataTypes.StringType, true),
@@ -51,7 +52,7 @@ public class Rdd2DataFrameDynamic {
         SQLContext sqlContext=new SQLContext(context);
         
         //创建studentsRdd
-        JavaRDD<Row> studentsRdd=context.textFile("C://Users//yanglin//Desktop//test//students.txt").map(new Function<String, Row>() {
+        JavaRDD<Row> studentsRdd=context.textFile("src/main/resources/students.txt").map(new Function<String, Row>() {
 
             private static final long serialVersionUID = 1L;
 
@@ -61,7 +62,9 @@ public class Rdd2DataFrameDynamic {
             }
         });
         
+        //使用动态构建的元数据创建DataFrame
         DataFrame studentDataFrame= sqlContext.createDataFrame(studentsRdd, structType);
+        
         sqlContext.registerDataFrameAsTable(studentDataFrame, "students");
         
         /**

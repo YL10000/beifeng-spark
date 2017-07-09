@@ -70,7 +70,7 @@ public class InnerFunction {
                 DataTypes.createStructField("date",DataTypes.StringType, true),
                 DataTypes.createStructField("id",DataTypes.IntegerType, true),
                 DataTypes.createStructField("price",DataTypes.DoubleType, true)
-                ))).groupBy("date");
+                ))).groupBy("date").count().show();
     }
 
 }

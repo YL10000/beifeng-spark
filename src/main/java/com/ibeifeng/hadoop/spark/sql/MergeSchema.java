@@ -37,6 +37,10 @@ import scala.collection.Seq;
  * MergeSchema
  *	
  * @Description 合并元数据
+ *      开启合并元数据的两种方式：
+ *          1) sqlContext.read().option("mergeSchema", "true")
+ *          2) SparkConf().set("spark.sql.parquet.mergeSchema", "true")
+ * 
  * @author yanglin
  * @version 1.0,2016年11月15日
  * @see
@@ -47,13 +51,18 @@ public class MergeSchema {
     public static void main(String[] args) {
         SparkConf conf=new SparkConf()
                 .setAppName("MergeSchema")
+                //.set("spark.sql.parquet.mergeSchema", "true")
                 .setMaster("local");
         JavaSparkContext javaSparkContext=new JavaSparkContext(conf);
         SQLContext sqlContext=new SQLContext(javaSparkContext);
-        DataFrame idAndNameDF=sqlContext.read().format("json").load("C://Users//yanglin//Desktop//test//megerschema//idandname.txt");
-        DataFrame idAndAgeDF=sqlContext.read().format("json").load("C://Users//yanglin//Desktop//test//megerschema//idandage.txt");
+        
+        /**
+         * megerschema/idandage.txt 中的内容只有id和age两个属性
+         * megerschema/idandname.txt 中的内容只有id和name两个属性
+         * 合并以后的元素为id,name,age三个属性
+         */
         //合并两个元数据
-        DataFrame personDF=sqlContext.read().option("mergeSchema", "true").format("json").load("C://Users//yanglin//Desktop//test//megerschema");
+        DataFrame personDF=sqlContext.read().option("mergeSchema", "true").format("json").load("src/main/resources/megerschema");
         personDF.printSchema();
         personDF.show();
     }

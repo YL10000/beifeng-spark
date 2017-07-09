@@ -12,6 +12,7 @@ package com.ibeifeng.hadoop.spark.sql;
 
 import org.apache.spark.SparkConf;
 import org.apache.spark.api.java.JavaSparkContext;
+import org.apache.spark.sql.DataFrame;
 import org.apache.spark.sql.SQLContext;
 import org.apache.spark.sql.hive.HiveContext;
 
@@ -50,7 +51,7 @@ public class StudentScoreHive {
         //将结果保存到表sqark.good_student_info
         hiveContext.sql("DROP TABLE IF EXISTS sqark.good_student_info");
         hiveContext.sql("select s.name,s.score,i.age from sqark.student_score s left join sqark.student_info i on s.name=i.name where s.score>80")
-            .saveAsTable("sqark.good_student_info");
+            .write().saveAsTable("sqark.good_student_info");
         
         hiveContext.table("sqark.good_student_info").show();
         context.close();

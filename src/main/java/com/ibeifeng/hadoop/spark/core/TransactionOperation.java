@@ -84,6 +84,7 @@ public class TransactionOperation {
      */
     public static void filterAndReduce(JavaSparkContext context) {
         Integer evenSum = context
+                //通过并行化集合来创建RDD
                 .parallelize(Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9, 10))
                 //过滤如何条件的数据
                 .filter(new Function<Integer, Boolean>() {

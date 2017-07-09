@@ -30,7 +30,7 @@ import org.apache.spark.broadcast.Broadcast;
  *      spark提供了两种共享变量：Broadcast variable(广播变量) 和 Accumuatro (累积变量)
  *          共享变量仅仅为每个节点拷贝一份
  *          Broadcast variable(广播变量):共享只读
- *          Accumuatro (累积变量):共享可写
+ *          Accumuatro (累积变量):共享可写，只允许add操作，用于计数、求和。
  * @author yanglin
  * @version 1.0,2016年11月7日
  * @see

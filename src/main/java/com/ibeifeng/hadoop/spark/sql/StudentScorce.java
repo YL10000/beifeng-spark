@@ -48,7 +48,7 @@ public class StudentScorce {
         JavaSparkContext context=new JavaSparkContext(conf);
         SQLContext sqlContext=new SQLContext(context);
         //获取学生分数dataframe
-        DataFrame scoresDF = sqlContext.read().json("C://Users//yanglin//Desktop//test//scores.txt");
+        DataFrame scoresDF = sqlContext.read().json("src/main/resources/scores.txt");
         sqlContext.registerDataFrameAsTable(scoresDF, "scores");
         //获取学生信息dataframe
         DataFrame studentInfosDF=sqlContext.read().json(context.parallelize(Arrays.asList(
@@ -106,12 +106,12 @@ public class StudentScorce {
                 DataTypes.createStructField("name", DataTypes.StringType, true),
                 DataTypes.createStructField("score", DataTypes.LongType, true),
                 DataTypes.createStructField("age", DataTypes.LongType, true)
-            ))).write().format("json").save("C://Users//yanglin//Desktop//test//studentScores");;*/
+            ))).write().format("json").save("src/main/resources/studentScores");;*/
         
         
        //方法二： 
         sqlContext.sql("select s.name,s.score,i.age from scores s left join infos i on s.name=i.name where s.score > 80")
-        .write().format("json").save("C://Users//yanglin//Desktop//test//studentScoresjoin");
+        .write().format("json").save("src/main/resources/studentScoresjoin");
         
     }
 

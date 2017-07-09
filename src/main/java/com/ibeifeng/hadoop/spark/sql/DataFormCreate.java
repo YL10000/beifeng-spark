@@ -34,10 +34,14 @@ public class DataFormCreate {
         JavaSparkContext context=new JavaSparkContext(conf);
         //创建sqlContext对象
         SQLContext sqlContext=new SQLContext(context);
-        //加载json文件
-        //sqlContext.read().json("C://Users//yanglin//Desktop//test//datafromcreate.txt").show();
-        sqlContext.read().format("json").load("C://Users//yanglin//Desktop//test//datafromcreate.txt")
-            .select(new Column("name"),new Column("age")).write().save("C://Users//yanglin//Desktop//test//nameAndAge.txt");;
+        
+        //通过两种方式加载json文件
+        //sqlContext.read().json("src/main/resources/datafromcreate.txt").show();
+        sqlContext.read().format("json").load("src/main/resources/datafromcreate.txt")
+            .select(new Column("name"),new Column("age"))
+        
+        //将查询到的数据保存到指定目录中,默认以parquet类型进行保存，可以使用format修改保存的文件格式
+        .write().save("src/main/resources/output/nameAndAge");
         //.show();
     }
 

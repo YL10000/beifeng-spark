@@ -34,7 +34,13 @@ public class DataFormOperation {
         
         JavaSparkContext context=new JavaSparkContext(conf);
         SQLContext sqlContext=new SQLContext(context);
-        DataFrame dataFrame=sqlContext.read().json("C://Users//yanglin//Desktop//test//datafromcreate.txt");
+        
+        //通过sqlContext读取json文件创建DataFrame
+        //DataFrame dataFrame=sqlContext.read().json("src/main/resources/datafromcreate.txt");
+        
+        //加载parquet文件创建DataFrame
+        DataFrame dataFrame=sqlContext.read().parquet("src/main/resources/output/nameAndAge/part-r-00000-8fda054c-40ec-46fa-9135-a236d786c730.gz.parquet");
+        
         //查询所有数据
         dataFrame.show();
         

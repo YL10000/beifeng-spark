@@ -15,7 +15,7 @@ import java.io.Serializable;
 /**
  * Student
  *	
- * @Description 功能详细描述 
+ * @Description 通过javabean定义dataframe的元数据
  * @author yanglin
  * @version 1.0,2016年11月14日
  * @see
@@ -65,6 +65,9 @@ public class Student implements Serializable{
     public Student() {
         super();
     }
-    
-    
+
+    @Override
+    public String toString() {
+        return "Student [id=" + id + ", name=" + name + ", age=" + age + "]";
+    }
 }
