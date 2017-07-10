@@ -10,15 +10,12 @@
  */
 package com.ibeifeng.hadoop.spark.sql;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.spark.SparkConf;
 import org.apache.spark.api.java.JavaSparkContext;
-import org.apache.spark.sql.Row;
 import org.apache.spark.sql.SQLContext;
-import org.apache.spark.sql.expressions.MutableAggregationBuffer;
-import org.apache.spark.sql.expressions.UserDefinedAggregateFunction;
-import org.apache.spark.sql.types.DataType;
+import org.apache.spark.sql.api.java.UDF1;
 import org.apache.spark.sql.types.DataTypes;
-import org.apache.spark.sql.types.StructType;
 
 /**
  * UDFFunction
@@ -36,9 +33,24 @@ public class UDFFunction {
         JavaSparkContext context=new JavaSparkContext(conf);
         SQLContext sqlContext=new SQLContext(context);
         sqlContext.read().json("C://Users//yanglin//Desktop//test//scores.txt").registerTempTable("scores");;
+        
+        //自定义UDF函数
+        sqlContext.udf().register("strLen", new UDF1<String, Integer>() {
+            
+            private static final long serialVersionUID = 1L;
+
+            @Override
+            public Integer call(String t1) throws Exception {
+                if (StringUtils.isBlank(t1)) {
+                    return 0;
+                }
+                return t1.length();
+            }
+        }, DataTypes.IntegerType);
+        
         //使用java8中的lambda表达式创建匿名函数
         //sqlContext.udf().register("strLen", (String s)->s.length(),DataTypes.IntegerType);
-        //sqlContext.sql("select name,strLen(name) from scores").show();
+        sqlContext.sql("select name,strLen(name) from scores").show();
         context.close();
         
     }
