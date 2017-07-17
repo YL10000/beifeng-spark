@@ -36,6 +36,7 @@ import scala.Tuple2;
 public class HdfsStreaming {
 
     public static void main(String[] args) {
+        //这里的local[2],cpu核数最少要为2,一个用来接收数据，一个用来处理数据  
         SparkConf conf=new SparkConf().setAppName("HdfsStreaming").setMaster("local[2]");
         JavaStreamingContext streamingContext=new JavaStreamingContext(conf, Durations.seconds(2));
         JavaDStream<String> dStream=streamingContext

@@ -43,9 +43,13 @@ public class WordCount {
                 Durations.seconds(1)//设置多长时间为一个批次
         );
         streamingContext.checkpoint("hdfs://hadoop-senior.ibeifeng.com:8020/user/yanglin/spark/streaming/checkpoint");
-        
+        //streamingContext.checkpoint("src/main/resources/checkpoint");
+        String hostName="hadoop-senior.ibeifeng.com";
+        //String hostName="hadoop-senior.ibeifeng.com";
+        //String hostName="127.0.0.1";
+        Integer port=9999;
         //监听主机名为hadoop-senior.ibeifeng.com的9999端口号
-        JavaPairDStream<String, Integer> pairs=streamingContext.socketTextStream("hadoop-senior.ibeifeng.com", 9999)
+        JavaPairDStream<String, Integer> pairs=streamingContext.socketTextStream(hostName, port)
             .flatMap(new FlatMapFunction<String, String>() {
 
                 private static final long serialVersionUID = 1L;
